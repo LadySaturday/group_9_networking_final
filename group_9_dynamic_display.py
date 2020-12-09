@@ -15,62 +15,69 @@ import random
 import threading
 import sched, time
 
-s = sched.scheduler(time.time, time.sleep)
-constValues = [50,200,40,59,123,165]#test values
-global counter
-counter = 1
-root = Tk.Tk()
-f = Figure(figsize=(3,4), dpi=100)
-ax = f.add_subplot(111)
-canvas = FigureCanvasTkAgg(f, master=root)
-xCol = []
-yCol = []
-maxValues=5
 
-def changeList():
-    global constValues   
-    constValues.pop(0)  
-    constValues.append(random.randint(0,300))
-    show_bar(constValues) 
-    root.after(500,changeList) 
+
+class DynamicDisplay:
+    def __init__(self):
+        self.s = sched.scheduler(time.time, time.sleep)
+        self.constValues = [50,200,40,59,123,165]#test values
+        self.counter =1
+        self.root = Tk.Tk()
+        f = Figure(figsize=(3,4), dpi=100)
+        self.ax = f.add_subplot(111)
+        self.canvas = FigureCanvasTkAgg(f, master=self.root)
+        self.f = f
+        self.xCol = []
+        self.yCol = []
+        self.maxValues=5
+
+    def changeList(self):
+        self.constValues.pop(0)  
+        self.constValues.append(random.randint(0,300))
+        self.show_bar(self.constValues) 
+        self.root.after(500,self.changeList) 
     
 
-def show_bar(data):
-    global ax
-    global canvas
-    global counter
-    ax.clear()
-    counter = counter + 1
+    def show_bar(self, data):
+        self.ax.clear()
+        self.counter += 1
 
-    if(len(yCol)>maxValues):
-        xCol.pop(0)
-        yCol.pop(0)
+        if(len(self.yCol)>self.maxValues):
+            self.xCol.pop(0)
+            self.yCol.pop(0)
 
+        
+        self.xCol.append(self.counter)   
+        self.yCol.append(data[5])
+        
+        #canvas.draw()   
+        self.canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.NONE, expand=0.5)
+        self.canvas.get_tk_widget().pack_forget()
+        self.f = Figure(figsize=(8,6), dpi=100)
+        self.ax = self.f.add_subplot(111)
+        self.ax.set_ylim(0, 300)  # limit fixed height
+        self.ax.yaxis.set_major_formatter(FormatStrFormatter('%d km/hr'))
+        self.canvas = FigureCanvasTkAgg(self.f, master=self.root)
+        self.ax.plot(self.xCol,self.yCol, label="Speed", color='g')
+        self.ax.set_xlabel("Trial")
+        self.ax.tick_params(axis = "x", which = "both", bottom = False, top = False, labelcolor='w')#only side ticks and labels
+        self.canvas.draw()   
+        self.canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.NONE, expand=0.5)
     
-    xCol.append(counter)   
-    yCol.append(data[5])
-    
-    
-    
-    #canvas.draw()   
-    canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.NONE, expand=0.5)
-    canvas.get_tk_widget().pack_forget()
-    f = Figure(figsize=(8,6), dpi=100)
-    ax = f.add_subplot(111)
-    ax.set_ylim(0, 300)  # limit fixed height
-    ax.yaxis.set_major_formatter(FormatStrFormatter('%d km/hr'))
-    canvas = FigureCanvasTkAgg(f, master=root)
-    ax.plot(xCol,yCol, label="Speed", color='g')
-    ax.set_xlabel("Trial")
-    ax.tick_params(axis = "x", which = "both", bottom = False, top = False, labelcolor='w')#only side ticks and labels
-    canvas.draw()   
-    canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.NONE, expand=0.5)
+    def start_threads(self):
+        t = threading.Thread(target=self.changeList)
+        t.setDaemon(True)
+        t.start()
+        self.root.mainloop()
+        Tk.mainloop()
 
+
+
+d = DynamicDisplay()
+
+d.start_threads()
 
 #show_bar(constValues)
 
 #thread
-t = threading.Thread(target=changeList())
-t.setDaemon(True)
-t.start()
 #Tk.mainloop() 
