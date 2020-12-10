@@ -27,6 +27,7 @@ class DynamicDisplayOG:
         self.xCol = []
         self.yCol = []
         self.maxValues=5
+        self.queue = []
 
 
     def changeList(self):
@@ -35,12 +36,17 @@ class DynamicDisplayOG:
 
     def set_list(self, lst):
         self.show_bar(lst)
+    
+
+    def watch(self):
+        self.show_bar(self.constValues)
+        self.root.after(500, self.watch)
 
     def add_value(self, val):
         if len(self.constValues) > 5:
            self.constValues.pop(0)
         self.constValues.append(val)
-        self.show_bar(self.constValues)
+        # self.show_bar(self.constValues)
 
     def show_bar(self, data):
         self.ax.clear()
@@ -73,15 +79,23 @@ class DynamicDisplayOG:
         self.show_bar(self.constValues)
 
 
+
+
         # print(f'TARGET: {target}')
         #thread
         # self.changeList()
-        # t = threading.Thread(target=None)
-        # t = threading.Thread(target=self.root.mainloop)
+        self.watch()
+        #t = threading.Thread(target=None)
+        # t = threading.Thread(target=start_tk, args=[self])
         # t.start()
+        # return t
         # t.setDaemon(True)
         # t.start()
         self.root.mainloop()
+
+def start_tk(dd):
+    dd.show_bar(dd.constValues)
+    dd.root.mainloop()
 
 if __name__ == '__main__':
     og = DynamicDisplayOG()
