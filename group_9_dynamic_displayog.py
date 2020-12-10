@@ -17,9 +17,9 @@ import sched, time
 
 class DynamicDisplayOG:
     def __init__(self):
-        self.s = sched.scheduler(time.time, time.sleep)
-        self.constValues = [50,200,40,59,123,165]#test values
-        self.counter = 1
+        # self.s = sched.scheduler(time.time, time.sleep)
+        self.constValues = [50, 200, 40, 59, 123, 165]#test values
+        self.counter = 0
         self.root = Tk.Tk()
         self.f = Figure(figsize=(3,4), dpi=100)
         self.ax = self.f.add_subplot(111)
@@ -30,27 +30,32 @@ class DynamicDisplayOG:
 
 
     def changeList(self):
-        self.constValues.pop(0)  
-        self.constValues.append(random.randint(0, 300))
-        self.show_bar(self.constValues) 
-        self.root.after(500, self.changeList) 
+        self.add_value(random.randint(0, 300))
+        self.root.after(500, self.changeList)
+
+    def set_list(self, lst):
+        self.show_bar(lst)
 
     def add_value(self, val):
-        pass  # TODO: add a value to the graph
+        if len(self.constValues) > 5:
+           self.constValues.pop(0)
+        self.constValues.append(val)
+        self.show_bar(self.constValues)
 
     def show_bar(self, data):
         self.ax.clear()
         self.counter += 1
 
-        if(len(self.yCol) > self.maxValues):
+        if len(self.yCol) > self.maxValues:
             self.xCol.pop(0)
             self.yCol.pop(0)
 
         
-        self.xCol.append(self.counter)   
-        self.yCol.append(data[5])
+        self.xCol.append(self.counter)
+        if len(data) > 0:
+            self.yCol.append(data[-1])
         
-        #canvas.draw()   
+        #canvas.draw()
         self.canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.NONE, expand=0.5)
         self.canvas.get_tk_widget().pack_forget()
         self.f = Figure(figsize=(8,6), dpi=100)
@@ -67,11 +72,22 @@ class DynamicDisplayOG:
     def start(self):
         self.show_bar(self.constValues)
 
+
+        # print(f'TARGET: {target}')
         #thread
-        t = threading.Thread(target=self.changeList())
-        t.setDaemon(True)
-        t.start()
+        # self.changeList()
+        # t = threading.Thread(target=None)
+        # t = threading.Thread(target=self.root.mainloop)
+        # t.start()
+        # t.setDaemon(True)
+        # t.start()
         self.root.mainloop()
 
-og = DynamicDisplayOG()
-og.start()
+if __name__ == '__main__':
+    og = DynamicDisplayOG()
+    og.start()
+
+    for i in range(10):
+        x = random.randint(0, 100)
+        og.add_value(x)
+        time.sleep(1.5)
