@@ -28,6 +28,8 @@ class DynamicDisplayOG:
         self.yCol = []
         self.maxValues=5
         self.queue = []
+        self.lastPlotted=0
+        self.plotNew=True
 
 
     def changeList(self):
@@ -39,13 +41,17 @@ class DynamicDisplayOG:
     
 
     def watch(self):
-        self.show_bar(self.constValues)
+        if (self.plotNew):
+            self.show_bar(self.constValues)
+            self.plotNew=False
         self.root.after(500, self.watch)
 
     def add_value(self, val):
-        if len(self.constValues) > 5:
-           self.constValues.pop(0)
-        self.constValues.append(val)
+        if(val!=self.lastPlotted):
+            if len(self.constValues) > 5:
+                self.constValues.pop(0)
+            self.constValues.append(val)
+            self.plotNew=True
         # self.show_bar(self.constValues)
 
     def show_bar(self, data):

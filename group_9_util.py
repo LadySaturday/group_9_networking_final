@@ -4,9 +4,11 @@ Group 9 - Lab 13
 import time
 from random import randint
 from os import system
-
+import group_9_data_generator as generator
 
 #
+sampleSize=300
+speedometer = generator.Speedometer(sampleSize, 300)
 
 
 start_id = 67  # my favorite number is 67
@@ -51,6 +53,8 @@ def create_data():
     # Gets random first & last name
     first = random_first_names[randint(0, len(random_first_names) - 1)]
     last = random_last_names[randint(0, len(random_last_names) - 1)]
+    #speeds=speedometer.generate_data()
+    #speed=speeds[1]
     
     payload = {
         'meta': {
@@ -60,7 +64,7 @@ def create_data():
         'data': {
             'id': start_id,
             'timestamp': int(time.time()),  # timestamp
-            'speed': randint(10, 120), # Random speed
+            'speed': randint(0, 300), # Random speed
             'unit': 'km/h', # speed unit
             'name': f'{first} {last}', # random person
             'vehicle': { # vehicle info

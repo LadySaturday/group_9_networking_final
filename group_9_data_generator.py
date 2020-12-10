@@ -19,6 +19,7 @@ class Speedometer:
         This method generates example data and displays it on a graph.
         """
         y = [self.generator((x % random.gauss(50, 5.0)) > 24) for x in range(self.sample_size)]
+        return y
         #plt.plot(y, 'r')
         #plt.show()
         
@@ -31,6 +32,6 @@ class Speedometer:
         self.value = {'base':speed, 'delta':0.15}
         
 
-
-speedometer = Speedometer(500, 50)
-speedometer.generate_data()
+if __name__ == '__main__':
+    speedometer = Speedometer(100, 300)
+    speedometer.generate_data()

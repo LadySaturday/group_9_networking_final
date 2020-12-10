@@ -16,15 +16,7 @@ display = graph.DynamicDisplayOG()
 
 tk_thread = None
 
-queue = []
 
-
-def update_graph(data):
-    print("received something")
-    # speed = queue.pop(0)
-    speed = data['data']['speed']
-    display.add_value(speed)
-    # queue.append(speed)
 
 def on_message(c, usrdata, msg):
     try:
@@ -32,17 +24,11 @@ def on_message(c, usrdata, msg):
         payload = msg.payload.decode('utf-8')
         data = json.loads(payload)
         util.print_data(data)
-        #queue.append(data['data']['speed'])
-        # display.set_list(queue)
-        # Decode payload and print using print_data
-        # t = threading.Thread(target=update_graph, args=[data], daemon=True)
-        # t.start()
-        # t.join()
 
         speed = data['data']['speed']
         display.add_value(speed)
     except Exception as e:
-        print(f'I h8 lyfe---------------------------------------\n{e}')
+        print(f'Exception: \n{e}')
 
     # update_graph(data)
    
