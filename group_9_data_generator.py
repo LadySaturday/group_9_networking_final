@@ -18,7 +18,7 @@ class Speedometer:
         """
         This method generates example data and displays it on a graph.
         """
-        y = [self.generator((x % random.gauss(50, 5.0)) > 24) for x in range(self.sample_size)]
+        y = [self.generator((x % random.gauss(250, 100)) ) for x in range(self.sample_size)]#### will always be doing about highway speed
         return y
         #plt.plot(y, 'r')
         #plt.show()

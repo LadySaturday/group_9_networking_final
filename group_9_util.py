@@ -8,7 +8,7 @@ import group_9_data_generator as generator
 
 #
 sampleSize=300
-speedometer = generator.Speedometer(sampleSize, 300)
+speedometer = generator.Speedometer(500, 50)
 
 
 start_id = 67  # my favorite number is 67
@@ -43,8 +43,10 @@ random_last_names = [
     'Torres',
     'Kirby',
 ]
+speeds=speedometer.generate_data()
 
 __colorful = True
+
 
 def create_data():
     '''Creates a payload to be sent'''
@@ -53,8 +55,8 @@ def create_data():
     # Gets random first & last name
     first = random_first_names[randint(0, len(random_first_names) - 1)]
     last = random_last_names[randint(0, len(random_last_names) - 1)]
-    #speeds=speedometer.generate_data()
-    #speed=speeds[1]
+    
+    speed=speeds[randint(0, len(speeds) - 1)]
     
     payload = {
         'meta': {
@@ -64,7 +66,7 @@ def create_data():
         'data': {
             'id': start_id,
             'timestamp': int(time.time()),  # timestamp
-            'speed': randint(0, 300), # Random speed
+            'speed': speed, # Random speed
             'unit': 'km/h', # speed unit
             'name': f'{first} {last}', # random person
             'vehicle': { # vehicle info
