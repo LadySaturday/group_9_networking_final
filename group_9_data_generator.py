@@ -17,21 +17,9 @@ class Speedometer:
             self.value['base'] -= self.value['delta']
         return self.value['base']
 
-    def generate_speed(self, increment = True):
-        """
-        This method generates example data and displays it on a graph.
-        """
-        y = [self.generator((x % random.gauss(250, 100)) ) for x in range(self.sample_size)]#### will always be doing about highway speed
-        self.dataset = y
-        return y
 
-    def next(self, error_rate=0.1) -> float:
-    # genrates a numbeer between 0.0 and 1.0
-        if random.random() <= error_rate:
-            raise Exception()
-        else:
-            r = random.randint(0, len(self.sample_size) - 1)
-            return self.dataset[r]
+
+    
 
     def create_data(self):
         '''Creates a payload to be sent'''
@@ -44,10 +32,6 @@ class Speedometer:
         speed= self.speeds[randint(0, len(self.speeds) - 1)]
         
         payload = {
-            'meta': {
-                'code': 200,
-                'msg': 'OK'
-            },
             'data': {
                 'id': self.start_id,
                 'timestamp': int(time.time()),  # timestamp
@@ -62,12 +46,28 @@ class Speedometer:
                 }
             }
         }
-
         
 
         self.start_id += 1
+        
+        try:
+            speed=next()
+            return util.ok(payload)
+        except:
+            msg = "Something went wrong."
+            return util.response(None, code=500, msg=msg)
+
         return payload
 
+    
+
+    def next(self, error_rate=0.1) -> float:
+    # genrates a numbeer between 0.0 and 1.0
+        if random.random() <= error_rate:
+            raise Exception()
+        else:
+            r = random.randint(0, len(self.speeds) - 1)
+            return self.speeds[r]
     
         
     def __init__(self, sample_size = 0, speed = 0):
@@ -112,6 +112,3 @@ class Speedometer:
         ]
         
 
-if __name__ == '__main__':
-    speedometer = Speedometer(100, 300)
-    speedometer.generate_speed()
