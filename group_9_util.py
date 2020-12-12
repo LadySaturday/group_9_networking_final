@@ -2,85 +2,30 @@
 Group 9 - Lab 13
 '''
 import time
-from random import randint
 from os import system
-import group_9_data_generator as generator
-
+import random
 #
-sampleSize=300
-speedometer = generator.Speedometer(500, 50)
 
 
-start_id = 67  # my favorite number is 67
-
-
-random_first_names = [
-    'Kathleen',
-    'Tia',
-    'Leandro',
-    'Ramiro',
-    'Elvis',
-    'Dylan',
-    'Dayana',
-    'Craig',
-    'Mariela',
-    'Adrienne',
-    'Clinton',
-    'Jamari',
-]
-
-random_last_names = [
-    'Hickman',
-    'Austin',
-    'Garner',
-    'Bernard',
-    'Ross',
-    'Pittman',
-    'Higgins',
-    'Atkins',
-    'Meza',
-    'Park',
-    'Torres',
-    'Kirby',
-]
-speeds=speedometer.generate_data()
 
 __colorful = True
 
 
-def create_data():
-    '''Creates a payload to be sent'''
-    global start_id, random_first_names, random_last_names
+def catch(self):
+    try:
+        speed = next(self)
+        return ok(speed)
+    except:
+        msg = "Something went wrong."
+        return response(None, code=500, msg=msg)
 
-    # Gets random first & last name
-    first = random_first_names[randint(0, len(random_first_names) - 1)]
-    last = random_last_names[randint(0, len(random_last_names) - 1)]
-    
-    speed=speeds[randint(0, len(speeds) - 1)]
-    
-    payload = {
-        'meta': {
-            'code': 200,
-            'msg': 'OK'
-        },
-        'data': {
-            'id': start_id,
-            'timestamp': int(time.time()),  # timestamp
-            'speed': speed, # Random speed
-            'unit': 'km/h', # speed unit
-            'name': f'{first} {last}', # random person
-            'vehicle': { # vehicle info
-                'fuel_in_litres': randint(10, 80),
-                'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}',
-                # random hex and removes 0x
-                'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
-            }
-        }
-    }
-
-    start_id += 1
-    return payload
-
+def next(self, error_rate=0.1) -> float:
+    # genrates a numbeer between 0.0 and 1.0
+    if random.random() <= error_rate:
+        raise Exception()
+    else:
+        r = random.randint(0, len(self.sample_size) - 1)
+        return self.dataset[r]
 
 def ok(data) -> dict:
     '''Wraps data as OK'''
