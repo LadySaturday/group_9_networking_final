@@ -25,6 +25,9 @@ def on_message(c, usrdata, msg):
         data = json.loads(payload)
         util.print_data(data)
 
+        if data['meta']['code'] != 200:
+            raise Exception(data['meta']['msg'])
+
         speed = data['data']['speed']
         display.add_value(speed)
     except Exception as e:
