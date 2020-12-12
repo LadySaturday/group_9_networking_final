@@ -82,6 +82,18 @@ def create_data():
     return payload
 
 
+def ok(data) -> dict:
+    '''Wraps data as OK'''
+    return response(data)
+
+def response(data, code=200, msg='OK') -> dict:
+    '''wraps data in a payload with a message & code'''
+    payload = {
+        'meta': { 'code': code, 'msg': msg },
+        'data': data
+    }
+    return payload
+
 def __wrap_var(var, colorful):
     '''Wraps a variable in a color (and quotes if it's a string)'''
     t = type(var)

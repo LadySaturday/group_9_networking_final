@@ -4,10 +4,16 @@ Group 9 - Lab 13
 import group_9_util as util
 import paho.mqtt.client as mqtt
 import json, time
+import group_9_data_generator as generator
 
 HOST = 'localhost'
 PORT = 8000
 TOPIC = 'Group9/lab13'
+
+sampleSize=300
+speedometer = generator.Speedometer(500, 50)
+speedometer.generate_data()
+
 
 def init_client():
     # create client and connects to broker
@@ -17,13 +23,23 @@ def init_client():
     client.loop_start()
     return client
 
+def create_data():
+    try:
+        speed = speedometer.next()
+        return util.ok(speed)
+    except:
+        msg = "Something went wrong."
+        return util.response(None, code=500, msg=msg)
+
+
 def main():
     try:
         client = init_client()
         time.sleep(1)
+        # Not sure if we have to do more data than just 10 sets
         for i in range(10):
             print(f'\n[ Pub ]: Creating & publishing data... ({i})')
-            data = util.create_data() # Creating new data
+            data = create_data() # Creating new data
             client.publish(TOPIC, json.dumps(data)) # Publishing data 
             print(f'[ Pub ]: Sleeping for 3 seconds...')
             time.sleep(3)
