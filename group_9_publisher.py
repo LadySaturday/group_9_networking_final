@@ -12,7 +12,7 @@ TOPIC = 'Group9/lab13'
 
 sampleSize=300
 speedometer = generator.Speedometer(500, 50)
-speedometer.generate_data()
+
 
 
 def init_client():

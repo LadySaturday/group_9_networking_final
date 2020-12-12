@@ -19,13 +19,7 @@ def catch(self):
         msg = "Something went wrong."
         return response(None, code=500, msg=msg)
 
-def next(self, error_rate=0.1) -> float:
-    # genrates a numbeer between 0.0 and 1.0
-    if random.random() <= error_rate:
-        raise Exception()
-    else:
-        r = random.randint(0, len(self.sample_size) - 1)
-        return self.dataset[r]
+
 
 def ok(data) -> dict:
     '''Wraps data as OK'''
