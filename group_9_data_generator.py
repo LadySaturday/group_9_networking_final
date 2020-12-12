@@ -28,36 +28,36 @@ class Speedometer:
         # Gets random first & last name
         first = self.random_first_names[randint(0, len(self.random_first_names) - 1)]
         last = self.random_last_names[randint(0, len(self.random_last_names) - 1)]
-        
-        speed= self.speeds[randint(0, len(self.speeds) - 1)]
-        
-        payload = {
-            'data': {
-                'id': self.start_id,
-                'timestamp': int(time.time()),  # timestamp
-                'speed': speed, # Random speed
-                'unit': 'km/h', # speed unit
-                'name': f'{first} {last}', # random person
-                'vehicle': { # vehicle info
-                    'fuel_in_litres': randint(10, 80),
-                    'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}',
-                    # random hex and removes 0x
-                    'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
-                }
-            }
-        }
+       
         
 
         self.start_id += 1
         
         try:
             speed=next()
-            return util.ok(payload)
+
+            payload = {
+                        'data': {
+                            'id': self.start_id,
+                            'timestamp': int(time.time()),  # timestamp
+                            'speed': speed, # Random speed
+                            'unit': 'km/h', # speed unit
+                            'name': f'{first} {last}', # random person
+                            'vehicle': { # vehicle info
+                                'fuel_in_litres': randint(10, 80),
+                                'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}',
+                                # random hex and removes 0x
+                                'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
+                            }
+                        }
+                    }
+
+            return util.ok(payload)#wraps payload with ok and code
         except:
             msg = "Something went wrong."
-            return util.response(None, code=500, msg=msg)
+            return util.response(None, code=500, msg=msg)#don't send data
 
-        return payload
+        #return payload
 
     
 
@@ -66,7 +66,7 @@ class Speedometer:
         if random.random() <= error_rate:
             raise Exception()
         else:
-            r = random.randint(0, len(self.speeds) - 1)
+            r = self.speeds[randint(0, len(self.speeds) - 1)]
             return self.speeds[r]
     
         

@@ -11,13 +11,7 @@ import random
 __colorful = True
 
 
-def catch(self):
-    try:
-        speed = next(self)
-        return ok(speed)
-    except:
-        msg = "Something went wrong."
-        return response(None, code=500, msg=msg)
+
 
 
 
