@@ -30,6 +30,8 @@ class DynamicDisplayOG:
         self.queue = []
         self.lastPlotted=0
         self.plotNew=True
+        self.minSpeed=0
+        self.maxSpeed=250
 
 
     def changeList(self):
@@ -48,8 +50,12 @@ class DynamicDisplayOG:
 
     def add_value(self, val):
         if(val!=self.lastPlotted):
-            if len(self.constValues) > 5:
-                self.constValues.pop(0)
+            #must be a change in speed
+            if(val<self.maxSpeed and val>self.minSpeed):
+                #speed must make sense
+                    if len(self.constValues) > 5:
+                        #only hold last 5 values
+                        self.constValues.pop(0)
             self.constValues.append(val)
             self.plotNew=True
         # self.show_bar(self.constValues)
