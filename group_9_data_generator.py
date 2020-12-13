@@ -34,39 +34,36 @@ class Speedometer:
         self.start_id += 1
         
         try:
-            speed=next()
+            speed=self.next()
 
             payload = {
-                        'data': {
-                            'id': self.start_id,
-                            'timestamp': int(time.time()),  # timestamp
-                            'speed': speed, # Random speed
-                            'unit': 'km/h', # speed unit
-                            'name': f'{first} {last}', # random person
-                            'vehicle': { # vehicle info
-                                'fuel_in_litres': randint(10, 80),
-                                'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}',
-                                # random hex and removes 0x
-                                'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
-                            }
-                        }
-                    }
+                'id': self.start_id,
+                'timestamp': int(time.time()),  # timestamp
+                'speed': speed, # Random speed
+                'unit': 'km/h', # speed unit
+                'name': f'{first} {last}', # random person
+                'vehicle': { # vehicle info
+                    'fuel_in_litres': randint(10, 80),
+                    'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}'#,
+                    # random hex and removes 0x
+                    # 'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
+                }
+            }
 
-            return util.ok(payload)#wraps payload with ok and code
-        except:
-            msg = "Something went wrong."
-            return util.response(None, code=500, msg=msg)#don't send data
+            return util.ok(payload) #wraps payload with ok and code
+        except Exception as e:
+            return util.response(None, code=500, msg=str(e))#don't send data
 
         #return payload
 
     
 
     def next(self, error_rate=0.1) -> float:
-    # genrates a numbeer between 0.0 and 1.0
+        # genrates a numbeer between 0.0 and 1.0
         if random.random() <= error_rate:
             raise Exception()
         else:
-            r = self.speeds[randint(0, len(self.speeds) - 1)]
+            r = randint(0, len(self.speeds) - 1)
             return self.speeds[r]
     
         
