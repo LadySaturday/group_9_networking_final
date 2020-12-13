@@ -3,16 +3,65 @@ Group 9 - Lab 13
 '''
 import time
 from os import system
-import random
+from random import randint
 #
 
 
 
 __colorful = True
+start_id = 67  # my favorite number is 67
 
+random_first_names = [
+    'Kathleen',
+    'Tia',
+    'Leandro',
+    'Ramiro',
+    'Elvis',
+    'Dylan',
+    'Dayana',
+    'Craig',
+    'Mariela',
+    'Adrienne',
+    'Clinton',
+    'Jamari',
+]
 
+random_last_names = [
+    'Hickman',
+    'Austin',
+    'Garner',
+    'Bernard',
+    'Ross',
+    'Pittman',
+    'Higgins',
+    'Atkins',
+    'Meza',
+    'Park',
+    'Torres',
+    'Kirby',
+]
 
+def rand_name() -> str:
+    global random_first_names, random_last_names
+    # Gets random first & last name
+    first = random_first_names[randint(0, len(random_first_names) - 1)]
+    last = random_last_names[randint(0, len(random_last_names) - 1)]
+    return f'{first} {last}'
 
+def uid() -> int:
+    '''Returns a unique id'''
+    global start_id
+    start_id += 1
+    return start_id ^ int(time.time())
+
+def rand_vehicle() -> dict:
+    vehicle = { # vehicle info
+        'fuel_in_litres': randint(10, 80),
+        'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}',
+        # random hex and removes 0x
+        'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
+    }
+    return vehicle
 
 
 def ok(data) -> dict:

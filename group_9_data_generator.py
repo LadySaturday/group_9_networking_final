@@ -23,31 +23,16 @@ class Speedometer:
 
     def create_data(self):
         '''Creates a payload to be sent'''
-        
-
-        # Gets random first & last name
-        first = self.random_first_names[randint(0, len(self.random_first_names) - 1)]
-        last = self.random_last_names[randint(0, len(self.random_last_names) - 1)]
-       
-        
-
-        self.start_id += 1
-        
         try:
             speed=self.next()
 
             payload = {
-                'id': self.start_id,
+                'id': util.uid(),
                 'timestamp': int(time.time()),  # timestamp
                 'speed': speed, # Random speed
                 'unit': 'km/h', # speed unit
-                'name': f'{first} {last}', # random person
-                'vehicle': { # vehicle info
-                    'fuel_in_litres': randint(10, 80),
-                    'model': f'{chr(randint(65, 90))}-{randint(15, 50) * 100}'#,
-                    # random hex and removes 0x
-                    # 'plate': hex(randint(0x100000, 0xFFFFFF)).upper()[2:]
-                }
+                'name': self.name, # random person
+                'vehicle': self.vehicle_info
             }
 
             return util.ok(payload) #wraps payload with ok and code
@@ -74,38 +59,8 @@ class Speedometer:
         self.sample_size = sample_size
         self.dataset = []
         self.value = {'base':speed, 'delta':0.15}
+        self.vehicle_info = util.rand_vehicle()
+        self.name = util.rand_name()
         self.speeds=[self.generator((x % random.gauss(250, 100)) ) for x in range(self.sample_size)]#### will always be doing about highway speed
-        self.start_id = 67  # my favorite number is 67
-
-
-        self.random_first_names = [
-            'Kathleen',
-            'Tia',
-            'Leandro',
-            'Ramiro',
-            'Elvis',
-            'Dylan',
-            'Dayana',
-            'Craig',
-            'Mariela',
-            'Adrienne',
-            'Clinton',
-            'Jamari',
-        ]
-
-        self.random_last_names = [
-            'Hickman',
-            'Austin',
-            'Garner',
-            'Bernard',
-            'Ross',
-            'Pittman',
-            'Higgins',
-            'Atkins',
-            'Meza',
-            'Park',
-            'Torres',
-            'Kirby',
-        ]
         
 
